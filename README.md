@@ -1,31 +1,30 @@
 # Overview
 
-This repo has the code for a simple Node Express application for demostrations.  
+This repo has the code for a simple Node Express frontend application for demostrations.  
 
-The application serves the front end HTML and acts as a proxy too the backend functionality for orders, catalog, and customer services.
+The frontend serves the home page and acts as a proxy too the backend functionality for orders, catalog, and customer services.
 
-The overall application is made up of 4 components: a front-end and 3 backend services.  The front-end look like this.
-
-<img src="images/orders.png" width="300"/>
-
-Once monitored by Dynatrace, a multi-tier call flow will be available such as shown below.
-
-<img src="images/dt-call-flow.png" width="500"/>
-
-Footnotes:
-* Demo app credits go to: https://github.com/ewolff/microservice-kubernetes
-* css from: https://www.w3schools.com/w3css/tryw3css_templates_clothing_store.htm
-* image from: https://www.pexels.com/photo/five-people-standing-against-wall-1345082/
+See the [overview](https://github.com/dt-orders/overview) repo for an overiew for that whole application.
 
 # Developer Notes
 
-## Run Application and All Services Locally
+For the frontend to call the backend services locally, the ports and IP of these services needs to be passed into Docker as environment variables -AND- the orders, catalog, and customer services must be listening on the ports defined in this script.
 
-To use pre-build or locally build images to start the entire application, just run `docker-compose up` to start all the services.  It takes about 45 seconds to start, but then the application can be accessed on port 80 at ```http://localhost```.  You can adjust the `docker-compose.yaml` for alternate ports and images names to meet your needs.
+## Run Application and all services locally
 
-## Build Docker Images and Run Locally 
+To use pre-build or locally build images to start the entire application, see the [[overview](https://github.com/dt-orders/overview) repo for a `docker-compose` file you can use.
 
-Use the provided Unix shell scipt that will build the frontend docker image and run it. For the frontend to call backend services locally, the ports and IP of these services needs to be passed into Docker as environment variables -AND- the orders, catalog, and customer services must be listening on the ports defined in this script.
+## Run front end application from code
+
+    ```
+    cd frontend
+    npm install
+    DEBUG=frontend:* npm start
+    ```
+
+## Build Docker images and run locally 
+
+Use the provided Unix shell scipt that will build the frontend docker image and run it. 
 
     Just call: `./buildrun.sh <REPOSITORY> <VERSION_TAG>`
 
@@ -39,7 +38,7 @@ Use the provided Unix shell scipt that will build the frontend docker image and 
 
 2. access application at ```http://localhost```
 
-## Build Docker Images and Push Images to a repository
+## Build Docker Images and push images to a repository
 
 Use the provided Unix shell scipt that will build the frontend docker image and publish it. 
 
@@ -52,3 +51,8 @@ Use the provided Unix shell scipt that will build the frontend docker image and 
     ./buildpush.sh dtdemos 1
     ```
 
+# Credits
+
+* Orginal demo code: https://github.com/ewolff/microservice-kubernetes
+* CSS: https://www.w3schools.com/w3css/tryw3css_templates_clothing_store.htm
+* Order Image: https://www.pexels.com/photo/five-people-standing-against-wall-1345082/

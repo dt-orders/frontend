@@ -8,7 +8,7 @@ then
   exit 1
 fi
 
-IMAGE=keptn-orders-frontend-node
+IMAGE=dt-orders-frontend
 REPOSITORY=$1
 VERSION_TAG=$2
 FULLIMAGE=$REPOSITORY/$IMAGE:$VERSION_TAG
