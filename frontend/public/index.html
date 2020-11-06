@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dynatrace Order Processing</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.w3-sidebar a {font-family: "Roboto", sans-serif}
+body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
+</style>
+</head>
+<body class="w3-content" style="max-width:1200px">
+
+<nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
+
+<div class="w3-container w3-display-container w3-padding-16">
+		<h3 class="w3-wide"><b>Dynatrace Order Processing</b></h3>
+		<img src="images/dynatrace_logo.png" alt="dynatrace" style="width:100px;height:100px;">
+</div>
+<div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
+	<a href="/customer/list.html" class="w3-bar-item w3-button">Customer</a>
+	<a href="/catalog/list.html" class="w3-bar-item w3-button">Catalog</a>
+	<a href="/catalog/searchForm.html" class="w3-bar-item w3-button">Search Items</a>
+	<a href="/order/" class="w3-bar-item w3-button">Order</a>
+</div>
+</nav>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:250px">
+
+		<header class="w3-container w3-xlarge">
+				<p class="w3-left">&nbsp;</p>
+			  </header>
+			  
+	<div class="w3-display-container w3-container">
+		<img src="images/black-friday-fashion-friends-1345082.jpg" alt="Friends on Wall" style="width:75%">
+	</div>
+
+	<h3 class="w3-wide"><b>Backend service versions</b></h3>
+	<table>
+		<tr>
+			<td>Catalog</td>
+			<td>Customer</td>
+			<td>Order</td>
+		</tr>
+		<tr>
+			<td><iframe width="125" height="50" id="iframe3" src="/catalog/version"></iframe></div></td>
+			<td><iframe width="125" height="50" id="iframe3" src="/customer/version"></iframe></div></td>
+			<td><iframe width="125" height="50" id="iframe3" src="/order/version"></iframe></div></td>
+		</tr>
+	</table>
+
+</div>
+
+</body>
+</html>
