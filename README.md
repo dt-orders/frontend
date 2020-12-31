@@ -6,6 +6,8 @@ The frontend serves the home page and acts as a proxy too the backend functional
 
 See the [overview](https://github.com/dt-orders/overview) repo for an overiew for that whole application.
 
+The frontend supports both the monolith and non-monolith backends. Set an environment variable `MONOLITH=true` to be in monolith mode which will serve a a different index HTML page with adjusted URL paths.
+
 # Developer Notes
 
 For the frontend to call the backend services locally, the ports and IP of these services needs to be passed into Docker as environment variables -AND- the orders, catalog, and customer services must be listening on the ports defined in this script.
@@ -34,7 +36,6 @@ Use the provided Unix shell scipt that will build the frontend docker image and 
     cd frontend
     ./buildrun.sh dtdemos 1
     ```
-
 
 2. access application at ```http://localhost```
 

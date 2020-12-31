@@ -16,7 +16,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // these defaults assume kubernetes DNS resolution (i.e. no service mesh)
 // if running in docker-compose, set URL to http://172.17.0.1 and match external port like 8081
@@ -24,9 +23,25 @@ var customerUrl = process.env.CUSTOMER_URL || 'http://customer:8080',
     catalogUrl = process.env.CATALOG_URL || 'http://catalog:8080',
     orderUrl = process.env.ORDER_URL || 'http://order:8080'
 
-app.use('/catalog', proxy(catalogUrl + '/list.html'));
-app.use('/order', proxy(orderUrl + '/list.html'));
-app.use('/customer', proxy(customerUrl + '/list.html'));
+if (process.env.MONOLITH === "true") {
+  var options = {
+    index: "monolith-index.html"
+  };
+  app.use(express.static(path.join(__dirname, 'public'),options));
+  console.log('Running in MONOLITH mode');
+} else {
+  app.use(express.static(path.join(__dirname, 'public')));
+  console.log('Running in STANDARD mode');
+}
+
+
+console.log('customerUrl: ' + customerUrl);
+console.log('catalogUrl: ' + catalogUrl);
+console.log('orderUrl: ' + orderUrl);
+
+app.use('/catalog', proxy(catalogUrl));
+app.use('/order', proxy(orderUrl));
+app.use('/customer', proxy(customerUrl));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
