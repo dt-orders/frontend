@@ -1,5 +1,9 @@
 FROM node:8
 
+# used to control the path used
+ARG MONOLITH=false
+ENV MONOLITH=$MONOLITH
+
 # Create app directory
 WORKDIR /usr/src/app
 

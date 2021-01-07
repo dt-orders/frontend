@@ -23,25 +23,46 @@ var customerUrl = process.env.CUSTOMER_URL || 'http://customer:8080',
     catalogUrl = process.env.CATALOG_URL || 'http://catalog:8080',
     orderUrl = process.env.ORDER_URL || 'http://order:8080'
 
-if (process.env.MONOLITH === "true") {
-  var options = {
-    index: "monolith-index.html"
-  };
-  app.use(express.static(path.join(__dirname, 'public'),options));
-  console.log('Running in MONOLITH mode');
-} else {
-  app.use(express.static(path.join(__dirname, 'public')));
-  console.log('Running in STANDARD mode');
-}
-
-
 console.log('customerUrl: ' + customerUrl);
 console.log('catalogUrl: ' + catalogUrl);
 console.log('orderUrl: ' + orderUrl);
 
-app.use('/catalog', proxy(catalogUrl));
-app.use('/order', proxy(orderUrl));
-app.use('/customer', proxy(customerUrl));
+// proxy the backend and service requests
+if (process.env.MONOLITH === "true") {
+  console.log('Running in MONOLITH mode');
+  var options = {
+    index: "monolith-index.html"
+  };
+  app.use(express.static(path.join(__dirname, 'public'),options));
+
+  app.use('/catalog', proxy(catalogUrl,{
+    proxyReqPathResolver: function (req) {
+      var parts = req.url.split('?');
+      var queryString = parts[1];
+      var updatedPath = '/catalog' + parts[0];
+      return updatedPath + (queryString ? '?' + queryString : '');
+    }}));
+  app.use('/order', proxy(orderUrl,{
+    proxyReqPathResolver: function (req) {
+      var parts = req.url.split('?');
+      var queryString = parts[1];
+      var updatedPath = '/order' + parts[0];
+      return updatedPath + (queryString ? '?' + queryString : '');
+    }}));
+  app.use('/customer', proxy(customerUrl,{
+    proxyReqPathResolver: function (req) {
+      var parts = req.url.split('?');
+      var queryString = parts[1];
+      var updatedPath = '/customer' + parts[0];
+      return updatedPath + (queryString ? '?' + queryString : '');
+    }}));
+} else {
+  console.log('Running in STANDARD mode');
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.use('/catalog', proxy(catalogUrl));
+  app.use('/order', proxy(orderUrl));
+  app.use('/customer', proxy(customerUrl));
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
