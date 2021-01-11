@@ -3,8 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var fs = require('fs')
 
 var app = express();
+
 var proxy = require('express-http-proxy');
 
 // PUG view engine setup
@@ -30,10 +32,16 @@ console.log('orderUrl: ' + orderUrl);
 // proxy the backend and service requests
 if (process.env.MONOLITH === "true") {
   console.log('Running in MONOLITH mode');
-  var options = {
-    index: "monolith-index.html"
-  };
-  app.use(express.static(path.join(__dirname, 'public'),options));
+
+  app.get('/',function(req, res) {
+    if (!req.query.username) {
+      userName = "Guest";
+    } else {
+        userName = req.query.username;
+    }
+    html = fs.readFileSync('public/monolith-index.html').toString().replace("REPLACE_USER_NAME", userName); 
+    res.send(html);
+  });
 
   app.use('/catalog', proxy(catalogUrl,{
     proxyReqPathResolver: function (req) {
@@ -58,11 +66,21 @@ if (process.env.MONOLITH === "true") {
     }}));
 } else {
   console.log('Running in STANDARD mode');
-  app.use(express.static(path.join(__dirname, 'public')));
+  app.get('/',function(req, res) {
+    if (!req.query.username) {
+      userName = "Guest";
+    } else {
+        userName = req.query.username;
+    }
+    html = fs.readFileSync('public/index.html').toString().replace("REPLACE_USER_NAME", userName); 
+    res.send(html);
+  });
   app.use('/catalog', proxy(catalogUrl));
   app.use('/order', proxy(orderUrl));
   app.use('/customer', proxy(customerUrl));
 }
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
