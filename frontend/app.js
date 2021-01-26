@@ -23,15 +23,22 @@ app.use(cookieParser());
 // if running in docker-compose, set URL to http://172.17.0.1 and match external port like 8081
 var customerUrl = process.env.CUSTOMER_URL || 'http://customer:8080',
     catalogUrl = process.env.CATALOG_URL || 'http://catalog:8080',
-    orderUrl = process.env.ORDER_URL || 'http://order:8080'
+    orderUrl = process.env.ORDER_URL || 'http://order:8080',
+    backendUrl = process.env.BACKEND_URL || 'http://backend:8080'
 
 console.log('customerUrl: ' + customerUrl);
 console.log('catalogUrl: ' + catalogUrl);
 console.log('orderUrl: ' + orderUrl);
+console.log('backendUrl: ' + backendUrl);
 
 // proxy the backend and service requests
 if (process.env.MONOLITH === "true") {
   console.log('Running in MONOLITH mode');
+
+  app.use('/version', proxy(backendUrl,{
+    proxyReqPathResolver: function (req) {
+      return "/version" 
+    }}));
 
   app.get('/',function(req, res) {
     if (!req.query.username) {
@@ -43,21 +50,21 @@ if (process.env.MONOLITH === "true") {
     res.send(html);
   });
 
-  app.use('/catalog', proxy(catalogUrl,{
+  app.use('/catalog', proxy(backendUrl,{
     proxyReqPathResolver: function (req) {
       var parts = req.url.split('?');
       var queryString = parts[1];
       var updatedPath = '/catalog' + parts[0];
       return updatedPath + (queryString ? '?' + queryString : '');
     }}));
-  app.use('/order', proxy(orderUrl,{
+  app.use('/order', proxy(backendUrl,{
     proxyReqPathResolver: function (req) {
       var parts = req.url.split('?');
       var queryString = parts[1];
       var updatedPath = '/order' + parts[0];
       return updatedPath + (queryString ? '?' + queryString : '');
     }}));
-  app.use('/customer', proxy(customerUrl,{
+  app.use('/customer', proxy(backendUrl,{
     proxyReqPathResolver: function (req) {
       var parts = req.url.split('?');
       var queryString = parts[1];
@@ -81,6 +88,12 @@ if (process.env.MONOLITH === "true") {
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/manifest',function(req, res) {
+  res.setHeader('content-type', 'text/plain');
+  text = fs.readFileSync('public/MANIFEST').toString();
+  res.send(text);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

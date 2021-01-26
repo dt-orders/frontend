@@ -23,6 +23,7 @@ IMAGE=dt-orders-frontend
 FULLIMAGE=$REPOSITORY/$IMAGE:$VERSION_TAG
 
 echo "Building: $FULLIMAGE"
+./writeManifest.sh
 docker build -t $FULLIMAGE .
 
 echo ""
@@ -32,10 +33,18 @@ echo "=============================================================="
 echo ""
 echo "access app @ http://localhost"
 echo "" 
-docker run -it -p 80:8080 \
-  --env CUSTOMER_URL=http://172.17.0.1:8181 \
-  --env CATALOG_URL=http://172.17.0.1:8182 \
-  --env ORDER_URL=http://172.17.0.1:8183 \
-  --env MONOLITH=$MONOLITH \
-  $FULLIMAGE 
 
+if [ "$MONOLITH" == "true" ]
+then
+    docker run -it -p 80:8080 \
+    --env BACKEND_URL=http://172.17.0.1:8080 \
+    --env MONOLITH=$MONOLITH \
+    $FULLIMAGE 
+else
+    docker run -it -p 80:8080 \
+    --env CUSTOMER_URL=http://172.17.0.1:8181 \
+    --env CATALOG_URL=http://172.17.0.1:8182 \
+    --env ORDER_URL=http://172.17.0.1:8183 \
+    --env MONOLITH=$MONOLITH \
+    $FULLIMAGE 
+fi
