@@ -22,4 +22,4 @@ COPY . .
 # override express default port of 3000
 ENV PORT=8080
 
-CMD [ "npm", "start" ]
+CMD ["sh", "-c", "cat public/MANIFEST && npm start"]

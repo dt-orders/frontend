@@ -21,6 +21,7 @@ echo ""
 echo "========================================================"
 echo "Building $FULLIMAGE"
 echo "========================================================"
+./writeManifest.sh
 docker build -t $FULLIMAGE .
 
 echo ""
