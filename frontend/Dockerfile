@@ -4,6 +4,10 @@ FROM node:8
 ARG MONOLITH=false
 ENV MONOLITH=$MONOLITH
 
+# set NODE_ENV=dev for http access logging
+ARG NODE_ENV=production
+ENV NODE_ENV=$NODE_ENV
+
 # Create app directory
 WORKDIR /usr/src/app
 

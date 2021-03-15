@@ -39,6 +39,7 @@ then
     docker run -it -p 80:8080 \
     --env BACKEND_URL=http://172.17.0.1:8080 \
     --env MONOLITH=$MONOLITH \
+    --env NODE_ENV=dev \
     $FULLIMAGE 
 else
     docker run -it -p 80:8080 \
@@ -46,5 +47,6 @@ else
     --env CATALOG_URL=http://172.17.0.1:8182 \
     --env ORDER_URL=http://172.17.0.1:8183 \
     --env MONOLITH=$MONOLITH \
+    --env NODE_ENV=dev \
     $FULLIMAGE 
 fi
