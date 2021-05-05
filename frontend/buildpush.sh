@@ -9,26 +9,22 @@ then
     REPOSITORY=dtdemos
 fi
 
-if [ -z "$VERSION_TAG" ]
-then
-    VERSION_TAG=1
-fi
-
-IMAGE=dt-orders-frontend
-FULLIMAGE=$REPOSITORY/$IMAGE:$VERSION_TAG
+IMAGE=$REPOSITORY/dt-orders-frontend
 
 echo ""
 echo "========================================================"
-echo "Building $FULLIMAGE"
+echo "Building images"
 echo "========================================================"
 ./writeManifest.sh
-docker build -t $FULLIMAGE .
+docker build -t $IMAGE:1 .
+docker tag $IMAGE:1 $IMAGE:1.0.0
 
 echo ""
 echo "========================================================"
-echo "Ready to push $FULLIMAGE ?"
+echo "Ready to push images ?"
 echo "========================================================"
 read -rsp "Press ctrl-c to abort. Press any key to continue"
 
-docker push $FULLIMAGE
+docker push $IMAGE:1 
+docker push $IMAGE:1.0.0
 

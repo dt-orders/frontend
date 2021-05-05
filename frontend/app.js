@@ -37,9 +37,19 @@ console.log('backendUrl: ' + backendUrl);
 if (process.env.MONOLITH === "true") {
   console.log('Running in MONOLITH mode');
 
-  app.use('/version', proxy(backendUrl,{
+  app.use('/backend/manifest', proxy(backendUrl,{
+    proxyReqPathResolver: function (req) {
+      return "/manifest" 
+    }}));
+
+  app.use('/backend/version', proxy(backendUrl,{
     proxyReqPathResolver: function (req) {
       return "/version" 
+    }}));
+
+  app.use('/backend/setversion/:id', proxy(backendUrl,{
+    proxyReqPathResolver: function (req) {
+      return "/setversion/"+req.params.id; 
     }}));
 
   app.get('/',function(req, res) {
