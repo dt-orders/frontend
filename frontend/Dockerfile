@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:16
 
 # used to control the path used
 ARG MONOLITH=false
